@@ -1,0 +1,9 @@
+{
+  "name": "claude-learnings",
+  "version": "0.1.0",
+  "description": "Build lessons recorded across Sanket's repositories (Astro, Cloudflare, Supabase, D1, data stories, interactive pieces, video): core rules, a done checklist, per-stack references and a lessons loop.",
+  "author": {
+    "name": "daredavil01"
+  },
+  "repository": "https://github.com/daredavil01/claude-learnings"
+}

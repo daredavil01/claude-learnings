@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>claude-learnings share card</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* 1080 × 1350 (4:5) vertical card for LinkedIn and WhatsApp. Same ledger identity as the infographic. */
+:root {
+  --paper: #eef2f5; --sheet: #f8fafb; --ink: #10233f; --muted: #56677d; --rule: #d2dae3;
+  --dot-off: #dde3ea; --stamp: #c86f1c; --stamp-soft: #f6e3cf; --fix: #2b7a66;
+  --display: "Bricolage Grotesque", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1350px; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); -webkit-font-smoothing: antialiased; }
+.card { width: 1080px; height: 1350px; padding: 60px 76px 48px; display: flex; flex-direction: column; gap: 28px; position: relative; overflow: hidden; }
+.card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 10px; background: var(--ink); }
+.eyebrow { font: 500 20px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; }
+.eyebrow b { color: var(--stamp); font-weight: 600; }
+h1 { font: 800 120px/0.9 var(--display); letter-spacing: -0.045em; }
+h1 span { color: var(--stamp); }
+.thesis { font: 400 40px/1.18 var(--display); letter-spacing: -0.01em; max-width: 880px; }
+.thesis em { font-style: normal; color: var(--stamp); font-weight: 600; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 3px solid var(--ink); border-bottom: 1px solid var(--rule); }
+.stat { padding: 18px 0 18px 22px; display: grid; gap: 6px; align-content: start; }
+.stat:first-child { padding-left: 0; }
+.stat + .stat { border-left: 1px solid var(--rule); }
+.stat b { font: 600 58px/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat span { font: 400 20px/1.25 var(--body); color: var(--muted); }
+.panel { background: var(--sheet); border: 1px solid var(--rule); border-radius: 18px; padding: 26px 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+.label { font: 500 17px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+.matrix { display: grid; grid-template-columns: repeat(19, 1fr); gap: 6px 5px; }
+.matrix i { width: 13px; height: 13px; border-radius: 50%; background: var(--dot-off); display: block; }
+.matrix i.on { background: var(--ink); }
+.matrix i.hot { background: var(--stamp); }
+.mcap { font: 400 17px/1.35 var(--body); color: var(--muted); margin-top: 16px; }
+.traps { display: grid; gap: 14px; }
+.trap { display: grid; gap: 7px; }
+.trap .n { font: 500 21px/1.2 var(--body); display: flex; justify-content: space-between; gap: 12px; }
+.trap .n span { font: 600 19px/1.2 var(--mono); color: var(--stamp); }
+.trap i { display: block; height: 9px; border-radius: 2px; background: var(--stamp); }
+.foot { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid var(--rule); padding-top: 24px; }
+.foot .what { font: 500 24px/1.35 var(--body); }
+.foot .what small { display: block; font: 400 19px/1.35 var(--mono); color: var(--muted); }
+.badge { font: 600 19px/1 var(--mono); color: var(--paper); background: var(--ink); padding: 14px 18px; border-radius: 10px; letter-spacing: 0.02em; }
+</style>
+</head>
+<body>
+<div class="card">
+  <p class="eyebrow"><span>Claude Code skill · v0.1.0</span><b>Build Lessons Ledger</b></p>
+  <h1>claude<span>-</span><br>learnings</h1>
+  <p class="thesis">19 repositories. ~360 lessons. <em>16 bugs I paid for twice.</em> Now my coding agent reads them before it starts.</p>
+
+  <div class="stats">
+    <div class="stat"><b>19</b><span>repos read</span></div>
+    <div class="stat"><b>10</b><span>core rules, every session</span></div>
+    <div class="stat"><b>16</b><span>packs, loaded when needed</span></div>
+    <div class="stat"><b>11</b><span>checks before “done”</span></div>
+  </div>
+
+  <div class="panel">
+    <div>
+      <p class="label">16 packs × 19 repos</p>
+      <div class="matrix" id="matrix"></div>
+      <p class="mcap">Each dot: a repo recorded a lesson in that pack. Orange row: “proving it works”, shared by 13 repos.</p>
+    </div>
+    <div>
+      <p class="label">Paid for more than once</p>
+      <div class="traps" id="traps"></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <p class="what">A check that has never failed<br>has not been tested.<small>github.com/daredavil01/claude-learnings</small></p>
+    <span class="badge">/claude-learnings</span>
+  </div>
+</div>
+<script>
+var REPOS = "YF LCC 45D ATF RF TLWR PW2 GB VT LH PS CMS D01 RS E20 DQ VC BK MF".split(" ");
+var PACKS = [
+  "45D ATF BK CMS E20 GB LCC PS RF RS TLWR VT YF",
+  "45D ATF DQ E20 GB LCC MF PS PW2 RF RS TLWR VC VT YF",
+  "45D ATF E20 LCC MF PS PW2 RF TLWR VC VT YF",
+  "45D ATF CMS LCC LH PS PW2 RF VC YF",
+  "LCC LH PS RS VT YF",
+  "ATF DQ LCC LH TLWR",
+  "LCC PS RF VC VT",
+  "45D ATF D01 DQ PS RS YF",
+  "LCC PS VC",
+  "LH PS PW2 YF",
+  "LCC",
+  "45D ATF LCC VT YF",
+  "45D LCC PS PW2 RF VT YF",
+  "45D ATF BK DQ LCC LH MF PS RS TLWR VC YF",
+  "BK PS PW2 YF",
+  "45D DQ GB MF PW2 RF TLWR"
+];
+var m = document.getElementById("matrix");
+PACKS.forEach(function (p, row) {
+  var set = p.split(" ");
+  REPOS.forEach(function (r) {
+    var i = document.createElement("i");
+    if (set.indexOf(r) !== -1) i.className = row === 0 ? "on hot" : "on";
+    m.appendChild(i);
+  });
+});
+var TRAPS = [
+  ["Overflow only at phone width", 7],
+  ["Shell heredocs break edit scripts", 5],
+  ["Health check that tests nothing", 4],
+  ["Layout shift after first paint", 4],
+  ["npm 11 lockfile vs Cloudflare npm 10", 3],
+  ["UTC date: wrong day in India", 2]
+];
+var t = document.getElementById("traps");
+TRAPS.forEach(function (x) {
+  var d = document.createElement("div"); d.className = "trap";
+  d.innerHTML = '<p class="n"></p><i style="width:' + (x[1] / 7 * 100) + '%"></i>';
+  d.firstChild.textContent = x[0];
+  var s = document.createElement("span"); s.textContent = "×" + x[1]; d.firstChild.appendChild(s);
+  t.appendChild(d);
+});
+</script>
+</body>
+</html>

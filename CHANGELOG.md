@@ -11,6 +11,8 @@ A release adds a heading; it never renames the last one.
 - `docs/infographic.html`: interactive infographic (pack × repo matrix, repeat
   traps, session flow, done checklist, install commands).
 - `docs/social-posts.md`: LinkedIn and WhatsApp announcements.
+- `docs/social/claude-learnings-share-1080x1350.png`: vertical share image
+  (4:5, rendered at 2x), with its HTML source.
 
 ## [0.1.0] - 2026-11-02
 

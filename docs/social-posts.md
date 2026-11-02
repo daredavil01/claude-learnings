@@ -1,5 +1,7 @@
 # Social posts
 
+Image to attach: `docs/social/claude-learnings-share-1080x1350.png` (1080 × 1350, 4:5, rendered at 2x).
+
 Ready to paste. Replace `<infographic link>` with the artifact URL once you have
 shared it publicly from its Share menu, and `<repo link>` with
 https://github.com/daredavil01/claude-learnings once the repo is public.

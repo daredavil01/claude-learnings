@@ -4,6 +4,14 @@ A release adds a heading; it never renames the last one.
 
 ## [Unreleased]
 
+### Added
+
+- Full README: install options, usage, core rules, traps, checklist, packs,
+  lessons loop, harvest options, repo codes, decisions and roadmap.
+- `docs/infographic.html`: interactive infographic (pack × repo matrix, repeat
+  traps, session flow, done checklist, install commands).
+- `docs/social-posts.md`: LinkedIn and WhatsApp announcements.
+
 ## [0.1.0] - 2026-11-02
 
 ### Added

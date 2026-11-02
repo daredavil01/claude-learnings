@@ -1,0 +1,739 @@
+<title>claude-learnings</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A Claude Code skill built from what nineteen repositories recorded about building them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: an engineering ledger. One column of ruled sections; the theme × repo matrix is the centrepiece, with a detail card beside it. */
+:root {
+  --paper: #eef2f5;
+  --sheet: #f8fafb;
+  --ink: #10233f;
+  --muted: #56677d;
+  --rule: #d2dae3;
+  --dot-off: #dfe5ec;
+  --stamp: #c86f1c;
+  --stamp-soft: #f6e3cf;
+  --fix: #2b7a66;
+  --fix-soft: #d8ede6;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0c1524; --sheet: #121f34; --ink: #e5ebf2; --muted: #93a2b6; --rule: #24344d;
+    --dot-off: #1d2b42; --stamp: #f0a04b; --stamp-soft: #3a2a19; --fix: #5cc0a3; --fix-soft: #153a33;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0c1524; --sheet: #121f34; --ink: #e5ebf2; --muted: #93a2b6; --rule: #24344d;
+  --dot-off: #1d2b42; --stamp: #f0a04b; --stamp-soft: #3a2a19; --fix: #5cc0a3; --fix-soft: #153a33;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 16px/1.55 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 64px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 56px;
+}
+.wrap > * { min-width: 0; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+p { margin: 0; }
+.eyebrow {
+  font: 500 12px/1.4 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+code { font-family: var(--mono); font-size: 0.9em; }
+:focus-visible { outline: 2px solid var(--stamp); outline-offset: 2px; border-radius: 4px; }
+
+/* Hero */
+.hero { display: grid; gap: 20px; }
+.hero h1 {
+  font-size: clamp(40px, 9vw, 104px);
+  overflow-wrap: anywhere;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+}
+.hero h1 span { color: var(--stamp); }
+.thesis {
+  font-family: var(--display);
+  font-size: clamp(20px, 2.6vw, 28px);
+  font-weight: 400;
+  line-height: 1.3;
+  max-width: 30ch;
+}
+.lede { color: var(--muted); max-width: 62ch; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  margin-top: 8px;
+}
+.stat { padding: 16px 12px 16px 0; display: grid; gap: 2px; }
+.stat + .stat { padding-left: 16px; border-left: 1px solid var(--rule); }
+.stat b { font: 600 clamp(28px, 4vw, 40px)/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--muted); line-height: 1.35; }
+@media (max-width: 720px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat, .stat + .stat { padding: 14px 0; border-left: 0; border-bottom: 1px solid var(--rule); }
+  .stat:nth-child(even) { padding-left: 16px; border-left: 1px solid var(--rule); }
+  .stat:last-child { grid-column: 1 / -1; padding-left: 0; border-left: 0; border-bottom: 0; }
+}
+
+/* Section header */
+.sec-head { display: grid; gap: 8px; margin-bottom: 20px; max-width: 68ch; }
+.sec-head h2 { font-size: clamp(26px, 3.4vw, 36px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
+.sec-head p { color: var(--muted); }
+
+/* Findings */
+.findings { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0; border-top: 1px solid var(--rule); }
+.finding { padding: 18px 20px 18px 0; display: grid; gap: 6px; border-bottom: 1px solid var(--rule); align-content: start; }
+.finding h3 { font-size: 18px; font-weight: 600; line-height: 1.25; }
+.finding p { font-size: 14.5px; color: var(--muted); }
+
+/* Matrix */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.chip {
+  font: 500 13px/1 var(--body);
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.matrix-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
+@media (max-width: 960px) { .matrix-layout { grid-template-columns: minmax(0, 1fr); } }
+.matrix-scroll { overflow-x: auto; background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; }
+table.matrix { border-collapse: collapse; width: 100%; min-width: 760px; }
+.matrix th, .matrix td { padding: 0; }
+.matrix thead th {
+  font: 500 10.5px/1 var(--mono);
+  color: var(--muted);
+  height: 72px;
+  vertical-align: bottom;
+  padding-bottom: 8px;
+  width: 26px;
+}
+.matrix thead th button {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 2px;
+  letter-spacing: 0.04em;
+}
+.matrix thead th button[aria-pressed="true"] { color: var(--stamp); font-weight: 600; }
+.matrix thead th.lf button { text-decoration: underline; text-underline-offset: 3px; }
+.matrix tbody tr { border-top: 1px solid var(--rule); cursor: pointer; }
+.matrix tbody tr:hover { background: color-mix(in srgb, var(--stamp-soft) 45%, transparent); }
+.matrix tbody tr[aria-selected="true"] { background: var(--stamp-soft); }
+.matrix tbody tr.dim { opacity: 0.28; }
+.matrix .pack {
+  text-align: left;
+  padding: 9px 12px 9px 14px;
+  white-space: nowrap;
+  font: 500 14px/1.2 var(--body);
+}
+.matrix .pack button { all: unset; cursor: pointer; display: inline-flex; gap: 8px; align-items: baseline; }
+.matrix .tier { font: 500 10px/1 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; width: 46px; display: inline-block; }
+.matrix .count { font: 500 12px/1 var(--mono); color: var(--muted); text-align: right; padding-right: 14px; width: 40px; }
+.matrix td.cell { text-align: center; width: 26px; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--dot-off); vertical-align: middle; }
+.dot.on { background: var(--ink); }
+.matrix td.cell.col-hit .dot.on { background: var(--stamp); transform: scale(1.25); }
+.matrix td.cell.col-hit { background: color-mix(in srgb, var(--stamp-soft) 60%, transparent); }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+.legend span { display: inline-flex; gap: 6px; align-items: center; }
+
+.detail {
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 22px;
+  display: grid;
+  gap: 14px;
+  position: sticky;
+  top: calc(env(safe-area-inset-top, 0px) + 16px);
+}
+@media (max-width: 960px) { .detail { position: static; } }
+.detail h3 { font-size: 24px; font-weight: 600; letter-spacing: -0.01em; }
+.detail .file { font: 400 12.5px/1.3 var(--mono); color: var(--muted); }
+.detail .when { font-size: 14px; color: var(--muted); }
+.detail ol { margin: 0; padding-left: 20px; display: grid; gap: 10px; font-size: 14.5px; }
+.detail ol li::marker { font-family: var(--mono); color: var(--stamp); }
+.repo-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.repo-tag { font: 500 11px/1 var(--mono); padding: 5px 7px; border-radius: 4px; background: var(--paper); border: 1px solid var(--rule); }
+.repo-note { font-size: 14px; color: var(--muted); }
+.repo-note b { color: var(--ink); font-weight: 600; }
+
+/* Traps */
+.traps { display: grid; gap: 4px; }
+.trap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(120px, 34%);
+  gap: 16px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+.trap:hover { background: var(--sheet); }
+.trap[aria-expanded="true"] { background: var(--sheet); border-color: var(--rule); }
+.trap .t-name { font-size: 15px; font-weight: 500; }
+.trap .t-where { font: 400 12px/1.3 var(--mono); color: var(--muted); display: block; margin-top: 2px; }
+.bar { display: flex; align-items: center; gap: 10px; }
+.bar i { display: block; height: 10px; border-radius: 2px; background: var(--stamp); min-width: 4px; }
+.bar span { font: 500 13px/1 var(--mono); font-variant-numeric: tabular-nums; color: var(--muted); }
+.fix {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  font-size: 14.5px;
+  padding-top: 4px;
+}
+.fix b { font: 600 11px/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fix); background: var(--fix-soft); padding: 4px 6px; border-radius: 3px; flex: none; }
+@media (max-width: 560px) { .trap { grid-template-columns: minmax(0, 1fr); gap: 8px; } }
+
+/* Flow */
+.flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--ink); }
+.step { padding: 18px 18px 18px 0; display: grid; gap: 8px; align-content: start; }
+.step + .step { padding-left: 18px; border-left: 1px solid var(--rule); }
+.step .eyebrow { color: var(--stamp); }
+.step h3 { font-size: 20px; font-weight: 600; }
+.step p { font-size: 14.5px; color: var(--muted); }
+@media (max-width: 820px) {
+  .flow { grid-template-columns: minmax(0, 1fr); }
+  .step + .step { padding-left: 0; border-left: 0; border-top: 1px solid var(--rule); }
+}
+.ladder { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 24px; }
+.rung { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; display: grid; gap: 6px; position: relative; }
+.rung code { color: var(--stamp); font-size: 13px; }
+.rung p { font-size: 14px; color: var(--muted); }
+.rung + .rung::before {
+  content: "→";
+  position: absolute;
+  left: -12px; top: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--muted);
+  font-family: var(--mono);
+}
+@media (max-width: 720px) {
+  .ladder { grid-template-columns: minmax(0, 1fr); }
+  .rung + .rung::before { content: "↓"; left: 50%; top: -6px; }
+}
+pre.entry {
+  margin: 16px 0 0;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 16px 18px;
+  overflow-x: auto;
+  font: 400 13px/1.65 var(--mono);
+}
+pre.entry .k { color: var(--stamp); font-weight: 500; }
+
+/* Checklist */
+.check-layout { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 32px; align-items: start; }
+@media (max-width: 760px) { .check-layout { grid-template-columns: minmax(0, 1fr); } }
+.checklist { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+.checklist li { border-bottom: 1px solid var(--rule); }
+.checklist label { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 12px; padding: 12px 0; cursor: pointer; font-size: 15px; align-items: start; }
+.checklist input { width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--fix); }
+.checklist input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--rule); }
+.meter { display: grid; gap: 10px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); }
+.meter b { font: 800 56px/1 var(--display); font-variant-numeric: tabular-nums; }
+.meter .track { height: 8px; background: var(--dot-off); border-radius: 4px; overflow: hidden; }
+.meter .track i { display: block; height: 100%; width: 0; background: var(--fix); transition: width 0.25s ease; }
+.meter p { font-size: 14px; color: var(--muted); }
+.ghost { font: 500 13px/1 var(--body); background: none; border: 1px solid var(--rule); color: var(--ink); border-radius: 6px; padding: 8px 12px; cursor: pointer; justify-self: start; }
+
+/* Install */
+.install { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.cmd { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 18px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.cmd h3 { font-size: 17px; font-weight: 600; }
+.cmd p { font-size: 14px; color: var(--muted); }
+.cmd pre { margin: 0; overflow-x: auto; font: 400 12.5px/1.6 var(--mono); background: var(--paper); border-radius: 6px; padding: 12px; }
+
+footer { border-top: 1px solid var(--rule); padding-top: 20px; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; font-size: 13px; color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Claude Code skill · v0.1.0 · compiled 2 November 2026</p>
+    <h1>claude<span>-</span>learnings</h1>
+    <p class="thesis">Every rule in it was paid for once. Sixteen were paid for twice.</p>
+    <p class="lede">A skill built from what nineteen repositories recorded about building them: Astro and Cloudflare sites, Supabase and D1 back ends, data stories, interactive pieces and video. It brings the fix from one repo into the next session in any other.</p>
+    <div class="stats" role="list">
+      <div class="stat" role="listitem"><b class="num">19</b><span>repositories read, read-only</span></div>
+      <div class="stat" role="listitem"><b class="num">~360</b><span>recorded entries consolidated</span></div>
+      <div class="stat" role="listitem"><b class="num">16</b><span>rule packs, loaded only when they apply</span></div>
+      <div class="stat" role="listitem"><b class="num">10</b><span>core rules carried into every session</span></div>
+      <div class="stat" role="listitem"><b class="num">16</b><span>traps already paid for twice</span></div>
+    </div>
+  </header>
+
+  <section aria-labelledby="h-why">
+    <div class="sec-head">
+      <p class="eyebrow">What the ledger showed</p>
+      <h2 id="h-why">The same lessons were learned over and over</h2>
+    </div>
+    <div class="findings">
+      <div class="finding"><h3>Fixes stayed where they were found</h3><p>Each fix sat in one repo's learnings file, where the next project never looked. The npm 11 lockfile broke Cloudflare's npm 10 build three times in two repos.</p></div>
+      <div class="finding"><h3>Lessons carried forward did not recur</h3><p>45-days imported its sister project's lessons on day one. Its log has no entry for either problem.</p></div>
+      <div class="finding"><h3>Nine repos had no learnings file</h3><p>Their lessons lived in a 63 KB CLAUDE.md, decision records, audits and status logs, where nothing marked which were learned the hard way.</p></div>
+      <div class="finding"><h3>Nothing covered the shell</h3><p>Shell traps, design handoffs, data stories, video and the lessons loop itself had no shared home until now.</p></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-matrix">
+    <div class="sec-head">
+      <p class="eyebrow">Inside the skill</p>
+      <h2 id="h-matrix">Sixteen packs, and where each lesson came from</h2>
+      <p>A filled dot means that repository recorded at least one lesson in the pack. Choose a pack to read its headline rules, or a repository code to see where it contributed. Underlined codes have a learnings file.</p>
+    </div>
+    <div class="chips" role="group" aria-label="Filter packs by tier">
+      <button class="chip" data-tier="all" aria-pressed="true">All packs</button>
+      <button class="chip" data-tier="Core" aria-pressed="false">Core · any project</button>
+      <button class="chip" data-tier="Stack" aria-pressed="false">Stack · Cloudflare, Supabase, D1, Astro</button>
+      <button class="chip" data-tier="Domain" aria-pressed="false">Domain · languages, design, AI, stories</button>
+    </div>
+    <div class="matrix-layout">
+      <div>
+        <div class="matrix-scroll">
+          <table class="matrix" id="matrix">
+            <thead><tr id="matrix-head"></tr></thead>
+            <tbody id="matrix-body"></tbody>
+          </table>
+        </div>
+        <div class="legend">
+          <span><i class="dot on"></i> recorded a lesson here</span>
+          <span><i class="dot"></i> none recorded</span>
+          <span>Number = rules in the pack</span>
+        </div>
+      </div>
+      <aside class="detail" id="detail" aria-live="polite"></aside>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-traps">
+    <div class="sec-head">
+      <p class="eyebrow">The strongest evidence</p>
+      <h2 id="h-traps">Traps already paid for twice</h2>
+      <p>The same failure, paid for again in another repo or later in the same one. Each bar is the number of times it was recorded. Choose a trap to see the fix the skill now carries.</p>
+    </div>
+    <div class="traps" id="traps"></div>
+  </section>
+
+  <section aria-labelledby="h-flow">
+    <div class="sec-head">
+      <p class="eyebrow">How a session uses it</p>
+      <h2 id="h-flow">Start, work, check, record</h2>
+    </div>
+    <div class="flow">
+      <div class="step"><p class="eyebrow">Session start</p><h3>Read before writing</h3><p>The repo's CLAUDE.md and learnings file, then <code>git status</code> for another session's files. Check what the repository contains before trusting a document that describes it.</p></div>
+      <div class="step"><p class="eyebrow">While working</p><h3>Load the matching pack</h3><p>Touching the lockfile loads dependencies. Deploying to Pages loads Cloudflare. A stack the repo does not use contributes no rules.</p></div>
+      <div class="step"><p class="eyebrow">Before calling it done</p><h3>Run the checklist</h3><p>Deploy runtime, a failing guard seen once, 375 px in both themes, derived numbers, the reader's time zone, an untouched lockfile.</p></div>
+      <div class="step"><p class="eyebrow">Session end</p><h3>Ask what surprised you</h3><p>Write an entry when surprised, corrected or slowed down, not on a schedule. Scheduled entries are the thin ones.</p></div>
+    </div>
+    <div class="ladder" aria-label="Promotion path">
+      <div class="rung"><code>LEARNINGS.md</code><p>A repo entry records the trigger, with a number.</p></div>
+      <div class="rung"><code>CLAUDE.md</code><p>It becomes a repo rule when it recurs or blocks work.</p></div>
+      <div class="rung"><code>claude-learnings</code><p>It joins the skill when it would help a different repo.</p></div>
+    </div>
+<pre class="entry"><span class="k">### 2026-11-02 · Short title</span>
+<span class="k">**Trigger:**</span> what happened, with a number.
+<span class="k">**Learning:**</span> the general point.
+<span class="k">**Rule:**</span> one imperative sentence, or "none yet".
+<span class="k">**Tags:**</span> verification, cloudflare
+<span class="k">**Promoted:**</span> CLAUDE.md §… or skill reference</pre>
+  </section>
+
+  <section aria-labelledby="h-check">
+    <div class="sec-head">
+      <p class="eyebrow">Try it</p>
+      <h2 id="h-check">Before you call it done</h2>
+      <p>The checklist from the skill. Tick what holds for the change in front of you; your ticks stay in this browser only.</p>
+    </div>
+    <div class="check-layout">
+      <ul class="checklist" id="checklist"></ul>
+      <div class="meter">
+        <p class="eyebrow">Done means done</p>
+        <b class="num" id="meter-n">0/11</b>
+        <div class="track"><i id="meter-bar"></i></div>
+        <p id="meter-msg">Nothing checked yet.</p>
+        <button class="ghost" id="reset" type="button">Clear ticks</button>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-install">
+    <div class="sec-head">
+      <p class="eyebrow">Get it</p>
+      <h2 id="h-install">Install in a minute</h2>
+    </div>
+    <div class="install">
+      <div class="cmd">
+        <h3>As a personal skill</h3>
+        <p>Available in every Claude Code session on this machine.</p>
+<pre id="cmd-a">git clone https://github.com/daredavil01/claude-learnings ~/code/claude-learnings
+ln -s ~/code/claude-learnings/skills/claude-learnings ~/.claude/skills/claude-learnings</pre>
+        <button class="ghost" type="button" data-copy="cmd-a">Copy commands</button>
+      </div>
+      <div class="cmd">
+        <h3>As a plugin for one session</h3>
+        <p>Loads the skill without installing anything.</p>
+<pre id="cmd-b">claude --plugin-dir ~/code/claude-learnings</pre>
+        <button class="ghost" type="button" data-copy="cmd-b">Copy command</button>
+      </div>
+      <div class="cmd">
+        <h3>Harvest new lessons</h3>
+        <p>Collects shared-format entries from every repo, grouped by tag.</p>
+<pre id="cmd-c">node skills/claude-learnings/scripts/harvest.mjs \
+  --since 2026-11-02 ~/code/*</pre>
+        <button class="ghost" type="button" data-copy="cmd-c">Copy command</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Built from the Build Lessons Ledger, 2 November 2026 · 19 repositories, read in place</span>
+    <span>github.com/daredavil01/claude-learnings</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var REPOS = [
+    ["YF", "yung-foundation-website", "NGO site, Astro SSR + Supabase", true],
+    ["LCC", "low-cost-clinick", "Clinic site and admin, Workers + D1 + R2 + Hono", true],
+    ["45D", "45-days", "Daily reading series, Astro on Cloudflare Pages", true],
+    ["ATF", "after-the-feed", "Interactive story, sister of 45-days", true],
+    ["RF", "run-folio", "Runners' race portfolio, Astro + Supabase + Strava", true],
+    ["TLWR", "the-long-way-around", "Scrollytelling, Vite + React canvas", true],
+    ["PW2", "personal-webaite-v2", "Voice-first personal site", true],
+    ["GB", "ghat-batteries", "Pumped-storage data story", true],
+    ["VT", "vtbm", "Bird-count event site", true],
+    ["LH", "learning-hub", "60-day plan tracker", true],
+    ["PS", "personal-site", "sankettambare.in", false],
+    ["CMS", "cms-site-planner", "Claude Code plugin for planning CMS sites", false],
+    ["D01", "daredavil01", "Profile repo and Day Island homepage", false],
+    ["RS", "reelsmoth", "Remotion video studio", false],
+    ["E20", "e20-ka-chakravyuha", "Ethanol and sugar data story", false],
+    ["DQ", "the-divident-question", "Youth dividend data story", false],
+    ["VC", "visiting-card", "3D visiting card", false],
+    ["BK", "brand-kit", "Brand kit and prompt engine", false],
+    ["MF", "museum-of-failures", "Civic museum site", false]
+  ];
+
+  var PACKS = [
+    { id: "verification", name: "Proving it works", tier: "Core", n: 18,
+      when: "Adding a test, guard, health check or CI gate.",
+      repos: "45D ATF BK CMS E20 GB LCC PS RF RS TLWR VT YF",
+      rules: ["Every guard gets a positive control: break the thing once and watch the check fire.",
+              "Test the built artefact on the deploy runtime, not the source on the dev server.",
+              "Repeat new browser tests (--repeat-each=3) before trusting them."] },
+    { id: "data-and-sources", name: "Numbers and sources", tier: "Core", n: 15,
+      when: "Publishing figures, quotes, sources or any fact.",
+      repos: "45D ATF DQ E20 GB LCC MF PS PW2 RF RS TLWR VC VT YF",
+      rules: ["Never type a number that a model or table can compute.",
+              "An unconfirmed fact is [TBD], and the release check refuses it.",
+              "Quotes move by script and are looked up by fragment, never retyped."] },
+    { id: "layout-css-a11y", name: "Layout, CSS, accessibility", tier: "Core", n: 19,
+      when: "Changing layout, CSS, fonts, colour, motion or accessibility.",
+      repos: "45D ATF E20 LCC MF PS PW2 RF TLWR VC VT YF",
+      rules: ["Look at every screen at 375 px and desktop; compare scrollWidth with the viewport.",
+              "Nothing a script fills in may appear after the first paint.",
+              "A design colour is a proposal until the contrast check agrees."] },
+    { id: "collaboration", name: "Working with Claude", tier: "Core", n: 12,
+      when: "Clarifying a request, porting someone's work, reconciling documents.",
+      repos: "45D ATF CMS LCC LH PS PW2 RF VC YF",
+      rules: ["Ask when two readings lead to different work; decide when they lead to the same work.",
+              "Check what the repository contains before trusting a document that describes it.",
+              "Another session may be working in the same repo; read git status first."] },
+    { id: "dependencies", name: "Dependencies and dev servers", tier: "Core", n: 10,
+      when: "Installing, upgrading or pinning anything; starting dev servers.",
+      repos: "LCC LH PS RS VT YF",
+      rules: ["Touch the lockfile only when package.json changed, with the npm the build uses.",
+              "Pin exact versions at least 14 days old, including every peer.",
+              "Stop a server before rebuilding what it serves."] },
+    { id: "agent-environment", name: "The agent's own environment", tier: "Core", n: 11,
+      when: "Running shell commands, killing processes, editing files, working on Windows.",
+      repos: "ATF DQ LCC LH TLWR",
+      rules: ["Never pkill -f a pattern that appears in your own command.",
+              "Write edit scripts with the Write tool and run them from a file, never through heredocs.",
+              "Never restore with git checkout while work is uncommitted."] },
+    { id: "privacy-security", name: "Privacy and security", tier: "Core", n: 11,
+      when: "Touching personal data, auth, errors, keys or analytics.",
+      repos: "LCC PS RF VC VT",
+      rules: ["Never spread a database row into a JSON response; list the fields by hand.",
+              "Errors are verbose inside the gate and opaque at the gate.",
+              "Request logs are a data store."] },
+    { id: "lessons-loop", name: "Docs and the lessons loop", tier: "Core", n: 12,
+      when: "Writing docs, changelogs, status files or learnings.",
+      repos: "45D ATF D01 DQ PS RS YF",
+      rules: ["Cutting a release adds a heading; it never renames the last one.",
+              "A lesson records its trigger; a rule lives in CLAUDE.md; promote it when it hardens.",
+              "Write entries when surprised, corrected or slowed down, not on a schedule."] },
+    { id: "stack-cloudflare", name: "Cloudflare Workers and Pages", tier: "Stack", n: 11,
+      when: "Deploying to Cloudflare Workers or Pages.",
+      repos: "LCC PS VC",
+      rules: ["Workers Free allows 10 ms CPU and 50 subrequests; local dev enforces neither.",
+              "On Pages a missing static file returns the app shell as 200, not a 404.",
+              "Run wrangler whoami before any deploy."] },
+    { id: "stack-supabase", name: "Supabase and PostgREST", tier: "Stack", n: 12,
+      when: "Using Supabase, Postgres or PostgREST.",
+      repos: "LH PS PW2 YF",
+      rules: ["Run supabase migration list before every push; repair hand-applied migrations at once.",
+              "PostgREST returns at most 1,000 rows per request.",
+              "Revoking from anon and authenticated still leaves PUBLIC able to execute."] },
+    { id: "stack-d1", name: "Cloudflare D1", tier: "Stack", n: 12,
+      when: "Using Cloudflare D1.",
+      repos: "LCC",
+      rules: ["A CHECK that evaluates to NULL passes; write date checks as date(x) IS x.",
+              "wrangler d1 execute --command silently ran only one statement.",
+              "Claim work atomically: INSERT … SELECT … ON CONFLICT DO NOTHING RETURNING."] },
+    { id: "stack-astro", name: "Astro", tier: "Stack", n: 11,
+      when: "Building with Astro.",
+      repos: "45D ATF LCC VT YF",
+      rules: ["A prop named as silently turned off type checking for 26 call sites.",
+              "Astro 7 needs Node 22.23.4 or later; pin it for the Pages build.",
+              "The preview server serves whatever is in dist/; build before every test run."] },
+    { id: "dates-and-languages", name: "Dates and languages", tier: "Domain", n: 12,
+      when: "Handling dates, time zones, Marathi, Hindi or Kannada.",
+      repos: "45D LCC PS PW2 RF VT YF",
+      rules: ["Count calendar days in the reader's zone; never compare dates through UTC strings.",
+              "A locale is not a specification: check what Intl actually emits.",
+              "Form size caps must count encoded bytes; Indic text costs about 9 per letter."] },
+    { id: "design-handoffs", name: "Design handoffs", tier: "Domain", n: 10,
+      when: "Starting from a Claude Design export or a prototype.",
+      repos: "45D ATF BK DQ LCC LH MF PS RS TLWR VC YF",
+      rules: ["A design export is a self-unpacking bundle; decode it before reading the spec.",
+              "Port the logic and structure, never the runtime.",
+              "A design's sample values never ship."] },
+    { id: "ai-features", name: "AI features", tier: "Domain", n: 8,
+      when: "Calling a language model, building retrieval or speech.",
+      repos: "BK PS PW2 YF",
+      rules: ["A model id is configuration, never a constant.",
+              "A prompt is not enforcement; code holds the rules.",
+              "Retrieval needs a similarity floor; type filters re-rank, not pre-filter."] },
+    { id: "storytelling", name: "Storytelling and video", tier: "Domain", n: 17,
+      when: "Shaping a data story, interactive piece or video.",
+      repos: "45D DQ GB MF PW2 RF TLWR",
+      rules: ["Completeness is not a feature; build the question the reader came with.",
+              "When the metaphor can't be completed, change the mapping.",
+              "Stills before motion: four PNGs take a minute, a render twenty."] }
+  ];
+
+  var TRAPS = [
+    ["Overflow only visible at phone width", "RF (3 bugs), LCC (4 screens)", 7, "A 375 px pass on every screen, comparing scrollWidth with the viewport."],
+    ["Shell heredocs break generated edit scripts", "LCC phases 7, 13, 15, 16, 18", 5, "Write the script with the Write tool and run it from a file."],
+    ["Layout shift from content revealed by script", "ATF/45D, LCC ×2, E20", 4, "Decide state in an inline head script, before first paint."],
+    ["Design export is a bundle that has to be decoded", "TLWR, ATF, 45D, MF", 4, "Find the long lines, decode them, then read the spec."],
+    ["A health check or gate passes without testing anything", "YF ×2, E20, LCC", 4, "Give it a positive control; point it at a broken configuration."],
+    ["npm 11 lockfile fails npm ci on Cloudflare's npm 10", "YF ×2, LH", 3, "npx npm@10.9.2 install, then prove it with npx npm@10.9.2 ci --dry-run."],
+    ["CRLF or encoding rewrites break a derived-text test", "LCC phases 9, 14, 18", 3, "Keep line endings; run Python with -X utf8."],
+    ["Stylesheet or class order decides which rule wins", "ATF, RF, VT", 3, "Import every stylesheet from one place; keep overrides at equal specificity."],
+    ["DesignSync can't run without an interactive login", "LH, DQ, TLWR", 3, "Unattended sessions work from exported files in the repo."],
+    ["Rebuilding dist/ under a running preview breaks it", "LCC phases 3 and 11", 2, "Stop the server before rebuilding what it serves."],
+    ["A UTC date shows the wrong day in India", "45D, VT", 2, "Compute in the reader's zone and mock the clock in tests."],
+    ["TypeScript 7 too new for the Astro toolchain", "YF, LCC", 2, "Read peerDependencies before pinning."],
+    ["pkill -f kills its own shell", "TLWR, ATF", 2, "pkill -f \"[v]ite\" so the pattern can't match itself."],
+    ["PostgREST caps responses at 1,000 rows", "PW2, LH", 2, "Page the requests, in parallel."],
+    ["PGRST205 when the app is ahead of its migration", "YF, LH", 2, "supabase migration list before every push; name the migration in the error."],
+    ["Hand-applied migrations drift from recorded history", "YF (0004–0005, then 0006–0008)", 2, "Run supabase migration repair straight after applying by hand."]
+  ];
+
+  var CHECKS = [
+    "Built and checked on the deploy runtime (preview build, not the dev server), and the deploy output read.",
+    "Every new test or guard seen to fail once, with what was broken written down.",
+    "Both branches of every new conditional exercised, with empty and full data.",
+    "Looked at 375 px and desktop, light and dark, reduced motion; scrollWidth equals the viewport.",
+    "Every number derived or cited; quotes looked up by script; no sample values from the design.",
+    "Dates computed in the reader's zone and tested by moving the clock, not waiting.",
+    "Lockfile untouched unless package.json changed, and then written with the build's npm and Node.",
+    "New browser tests repeated (--repeat-each=3) before they are trusted.",
+    "git status read before staging; no stray directories; nothing restored with git checkout.",
+    "Changelog, status and every index updated in the same commit.",
+    "Asked whether anything surprised, corrected or slowed you down, and wrote the entry."
+  ];
+
+  var state = { pack: "verification", repo: null, tier: "all" };
+  var $ = function (id) { return document.getElementById(id); };
+  function el(tag, attrs, text) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  // Matrix
+  var head = $("matrix-head");
+  var th0 = el("th", { scope: "col" }); th0.appendChild(el("span", { class: "eyebrow" }, "")); head.appendChild(th0);
+  REPOS.forEach(function (r) {
+    var th = el("th", { scope: "col", class: r[3] ? "lf" : "" });
+    var b = el("button", { type: "button", "aria-pressed": "false", title: r[1] + " · " + r[2], "data-repo": r[0] }, r[0]);
+    th.appendChild(b); head.appendChild(th);
+  });
+  head.appendChild(el("th", { scope: "col", class: "count" }, "#"));
+
+  var body = $("matrix-body");
+  PACKS.forEach(function (p) {
+    var tr = el("tr", { "data-pack": p.id, "data-tier": p.tier, "aria-selected": "false" });
+    var td = el("th", { scope: "row", class: "pack" });
+    var b = el("button", { type: "button" });
+    b.appendChild(el("span", { class: "tier" }, p.tier));
+    b.appendChild(document.createTextNode(p.name));
+    td.appendChild(b); tr.appendChild(td);
+    var set = p.repos.split(" ");
+    REPOS.forEach(function (r) {
+      var c = el("td", { class: "cell", "data-repo": r[0] });
+      var on = set.indexOf(r[0]) !== -1;
+      c.appendChild(el("i", { class: "dot" + (on ? " on" : ""), "aria-label": on ? r[0] + " recorded a lesson" : "" }));
+      tr.appendChild(c);
+    });
+    tr.appendChild(el("td", { class: "count" }, String(p.n)));
+    tr.addEventListener("click", function () { state.pack = p.id; render(); });
+    body.appendChild(tr);
+  });
+
+  head.addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-repo]");
+    if (!b) return;
+    state.repo = state.repo === b.dataset.repo ? null : b.dataset.repo;
+    render();
+  });
+  document.querySelectorAll(".chip").forEach(function (c) {
+    c.addEventListener("click", function () { state.tier = c.dataset.tier; render(); });
+  });
+
+  function render() {
+    document.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", String(c.dataset.tier === state.tier)); });
+    document.querySelectorAll("#matrix-head button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.repo === state.repo)); });
+    document.querySelectorAll("#matrix-body tr").forEach(function (tr) {
+      tr.setAttribute("aria-selected", String(tr.dataset.pack === state.pack));
+      tr.classList.toggle("dim", state.tier !== "all" && tr.dataset.tier !== state.tier);
+      tr.querySelectorAll("td.cell").forEach(function (td) { td.classList.toggle("col-hit", td.dataset.repo === state.repo); });
+    });
+    var p = PACKS.filter(function (x) { return x.id === state.pack; })[0];
+    var d = $("detail"); d.textContent = "";
+    d.appendChild(el("p", { class: "eyebrow" }, p.tier + " pack · " + p.n + " rules"));
+    d.appendChild(el("h3", null, p.name));
+    d.appendChild(el("p", { class: "file" }, "references/" + p.id + ".md"));
+    d.appendChild(el("p", { class: "when" }, "Loads when: " + p.when));
+    var ol = el("ol");
+    p.rules.forEach(function (r) { ol.appendChild(el("li", null, r)); });
+    d.appendChild(ol);
+    var tags = el("div", { class: "repo-tags", "aria-label": "Repositories that contributed" });
+    p.repos.split(" ").forEach(function (c) { tags.appendChild(el("span", { class: "repo-tag" }, c)); });
+    d.appendChild(tags);
+    if (state.repo) {
+      var r = REPOS.filter(function (x) { return x[0] === state.repo; })[0];
+      var count = PACKS.filter(function (x) { return x.repos.split(" ").indexOf(r[0]) !== -1; }).length;
+      var note = el("p", { class: "repo-note" });
+      note.appendChild(el("b", null, r[0] + " · " + r[1]));
+      note.appendChild(document.createTextNode(" — " + r[2] + ". Contributed to " + count + " of 16 packs" + (r[3] ? "." : "; no learnings file, lessons taken from its docs.")));
+      d.appendChild(note);
+    }
+  }
+  render();
+
+  // Traps
+  var max = TRAPS[0][2];
+  var tw = $("traps");
+  TRAPS.forEach(function (t, i) {
+    var b = el("button", { type: "button", class: "trap", "aria-expanded": "false", "aria-controls": "fix-" + i });
+    var left = el("span");
+    left.appendChild(el("span", { class: "t-name" }, t[0]));
+    left.appendChild(el("span", { class: "t-where" }, t[1]));
+    var bar = el("span", { class: "bar" });
+    var fill = el("i"); fill.style.width = (t[2] / max * 100) + "%";
+    bar.appendChild(fill); bar.appendChild(el("span", null, "×" + t[2]));
+    var fix = el("span", { class: "fix", id: "fix-" + i }); fix.hidden = true;
+    fix.appendChild(el("b", null, "Fix")); fix.appendChild(el("span", null, t[3]));
+    b.appendChild(left); b.appendChild(bar); b.appendChild(fix);
+    b.addEventListener("click", function () {
+      var open = b.getAttribute("aria-expanded") === "true";
+      b.setAttribute("aria-expanded", String(!open)); fix.hidden = open;
+    });
+    tw.appendChild(b);
+  });
+
+  // Checklist
+  var KEY = "claude-learnings-checks";
+  var saved = [];
+  try { saved = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) { saved = []; }
+  var cl = $("checklist");
+  CHECKS.forEach(function (c, i) {
+    var li = el("li"); var lab = el("label", { for: "chk-" + i });
+    var input = el("input", { type: "checkbox", id: "chk-" + i });
+    input.checked = saved.indexOf(i) !== -1;
+    input.addEventListener("change", updateMeter);
+    lab.appendChild(input); lab.appendChild(el("span", null, c));
+    li.appendChild(lab); cl.appendChild(li);
+  });
+  function updateMeter() {
+    var boxes = cl.querySelectorAll("input"); var on = [];
+    boxes.forEach(function (b, i) { if (b.checked) on.push(i); });
+    try { localStorage.setItem(KEY, JSON.stringify(on)); } catch (e) {}
+    $("meter-n").textContent = on.length + "/" + boxes.length;
+    $("meter-bar").style.width = (on.length / boxes.length * 100) + "%";
+    $("meter-msg").textContent = on.length === 0 ? "Nothing checked yet."
+      : on.length === boxes.length ? "Done. Now commit at a rollback boundary."
+      : (boxes.length - on.length) + " still open before this is done.";
+  }
+  updateMeter();
+  $("reset").addEventListener("click", function () {
+    cl.querySelectorAll("input").forEach(function (b) { b.checked = false; }); updateMeter();
+  });
+
+  // Copy buttons
+  document.querySelectorAll("[data-copy]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var pre = $(btn.dataset.copy); var label = btn.textContent;
+      function done(msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = label; }, 1600); }
+      try {
+        navigator.clipboard.writeText(pre.textContent).then(function () { done("Copied"); }, function () { select(pre); done("Selected, press Ctrl+C"); });
+      } catch (e) { select(pre); done("Selected, press Ctrl+C"); }
+    });
+  });
+  function select(node) {
+    var r = document.createRange(); r.selectNodeContents(node);
+    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+  }
+})();
+</script>
